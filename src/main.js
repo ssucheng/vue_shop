@@ -1,8 +1,16 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import axios from 'axios'
 import './plugins/element.js'
-
+// 全局样式
+import './assets/style/css/global.css'
+// 引入字体库
+import './assets/style/iconfont/iconfont.css'
+// 设置基础请求地址
+Vue.prototype.$http = axios.create({
+  baseURL: 'http://127.0.0.1:8888/api/private/v1/'
+})
 Vue.config.productionTip = false
 
 new Vue({
