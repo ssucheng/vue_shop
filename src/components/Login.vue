@@ -8,8 +8,8 @@
             </div>
             <!-- 表单 -->
               <el-form class="login_form" :model="ruleForm" :rules='rules' ref="ruleForm"  label-width="100px"  >
-                 <el-form-item label="用户名" prop="name">
-                     <el-input v-model="ruleForm.name" prefix-icon="icon iconuser"></el-input>
+                 <el-form-item label="用户名" prop="username">
+                     <el-input v-model="ruleForm.username" prefix-icon="icon iconuser"></el-input>
                  </el-form-item>
                  <el-form-item label="密码" prop="password" >
                      <el-input v-model="ruleForm.password" prefix-icon="icon iconmima" type="password" ></el-input>
@@ -27,15 +27,8 @@ export default {
   data () {
     return {
       ruleForm: {
-        name: 'admin',
-        password: '123456',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        username: 'admin',
+        password: '123456'
       },
       rules: {
         name: [
@@ -65,36 +58,54 @@ export default {
     //     }
     // }
     submitForm (formName) {
-      // console.log(val)
-      // 打印表单数据
-      // console.log(this.ruleForm)
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$http.post('login', {
-            username: this.ruleForm.name,
-            password: this.ruleForm.password
-          }).then(res => {
-            // console.log(res)
-            const { data } = res
-            const { meta } = data
-            if (meta.status === 200) {
-              this.$message.success('登录成功')
-            } else {
-              this.$message({
-                showClose: true,
-                message: meta.msg,
-                type: 'error'
-              })
-            }
+      // 方法一 逻辑
+      // this.$refs[formName].validate((valid) => {
+      //   if (valid) {
+      //     this.$http.post('login', {
+      //       username: this.ruleForm.name,
+      //       password: this.ruleForm.password
+      //     }).then(res => {
+      //       // console.log(res)
+      //       const { data } = res
+      //       const { meta } = data
+      //       if (meta.status === 200) {
+      //         this.$message.success('登录成功')
+      //       } else {
+      //         this.$message({
+      //           showClose: true,
+      //           message: meta.msg,
+      //           type: 'error'
+      //         })
+      //       }
+      //     })
+      //   } else {
+      //     return false
+      //   }
+      // })
+      // 方法二逻辑
+      this.$refs[formName].validate(async (valid) => {
+        // 如果表单valid为true 则 if(!valid) return不运行 逻辑就是先return if else 中的else部分
+        if (!valid) return false
+        const { data: res } = await this.$http.post('login', this.ruleForm)
+        console.log(res)
+        // debugger
+        if (res.meta.status !== 200) {
+          return this.$message({
+            showClose: true,
+            message: res.meta.msg,
+            type: 'error'
           })
-        } else {
-          return false
         }
+        this.$message.success('登录成功')
+        // 登录成功将token存储起来
+        window.sessionStorage.setItem('token', res.data.token)
+        // 跳转home页面
+        this.$router.push('/home')
       })
     },
     // 重置
-    resetForm (val) {
-      // console.log(val)
+    resetForm (formName) {
+      this.$refs[formName].resetFields()
     }
   }
 }
