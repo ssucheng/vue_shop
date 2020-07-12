@@ -9,10 +9,10 @@
             <!-- 表单 -->
               <el-form class="login_form" :model="ruleForm" :rules='rules' ref="ruleForm"  label-width="100px"  >
                  <el-form-item label="用户名" prop="username">
-                     <el-input v-model="ruleForm.username" prefix-icon="icon iconuser"></el-input>
+                     <el-input v-model="ruleForm.username" prefix-icon="iconfont iconuser"></el-input>
                  </el-form-item>
                  <el-form-item label="密码" prop="password" >
-                     <el-input v-model="ruleForm.password" prefix-icon="icon iconmima" type="password" ></el-input>
+                     <el-input v-model="ruleForm.password" prefix-icon="iconfont iconmima" type="password" ></el-input>
                  </el-form-item>
                  <el-form-item class="btns" >
                       <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
@@ -31,7 +31,7 @@ export default {
         password: '123456'
       },
       rules: {
-        name: [
+        username: [
           { required: true, message: '请输入用域名', trigger: 'blur' },
           { min: 3, max: 11, message: '长度在 3 到 11个字符', trigger: 'blur' }
         ],
@@ -87,7 +87,7 @@ export default {
         // 如果表单valid为true 则 if(!valid) return不运行 逻辑就是先return if else 中的else部分
         if (!valid) return false
         const { data: res } = await this.$http.post('login', this.ruleForm)
-        console.log(res)
+        // console.log(res)
         // debugger
         if (res.meta.status !== 200) {
           return this.$message({

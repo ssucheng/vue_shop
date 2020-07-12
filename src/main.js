@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
+// import VueRouter from 'vue-router'
 import './plugins/element.js'
 // 全局样式
 import './assets/style/css/global.css'
@@ -16,6 +17,12 @@ axios.interceptors.request.use((config) => {
   config.headers.Authorization = window.sessionStorage.getItem('token')
   return config
 })
+// 跳转成功 重复点击报错解决方案
+// const originalPush = VueRouter.prototype.push
+// VueRouter.prototype.push = function push (location) {
+//   return originalPush.call(this, location).catch(err => err)
+// }
+
 Vue.config.productionTip = false
 
 new Vue({

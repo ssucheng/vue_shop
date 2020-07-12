@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/Login.vue'
 import Home from '../components/home.vue'
+import User from '../components/user/User.vue'
+import welcome from '../components/Welcome.vue'
 
 Vue.use(VueRouter)
 
@@ -14,13 +16,24 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: Home
+    component: Home,
+    redirect: '/welcome',
+    children: [
+      { path: '/welcome', component: welcome },
+      { path: '/users', component: User }
+    ]
   }
 ]
 
 const router = new VueRouter({
   routes
 })
+// 重复点击 报错解决方案
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push (location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+// 导航守卫
 router.beforeEach((to, from, next) => {
   if (to.path === '/') return next()
   const tokenStr = window.sessionStorage.getItem('token')
