@@ -1,11 +1,7 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-    </el-breadcrumb>
+     <sc-breadcrumb :item-prop='navigation'></sc-breadcrumb>
     <!-- car视图区域 -->
     <el-card class="box-card" shadow="always" style="margin-top:15px ">
       <!-- 搜索添加 -->
@@ -46,7 +42,7 @@
             <el-tooltip class="item" effect="dark" content="删除" placement="top">
               <el-button type="danger" icon="el-icon-delete" @click="delButton(scope.row)"></el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="分配角色" placement="top">
+            <el-tooltip class="item" effect="dark" content="分配角色" placement="top" @click="assginButton(scope.row)">
               <el-button type="warning" icon="el-icon-setting"></el-button>
             </el-tooltip>
           </template>
@@ -69,22 +65,30 @@
     <el-dialog :title="formTitle" :visible.sync="dialogFormVisible" @close="addDialogClosed">
       <el-form :model="form" :rules="rules" ref="addForm">
         <el-form-item label="用户名称" :label-width="formLabelWidth" prop="username">
-          <el-input v-model="form.username" :disabled="formTitle === `编辑用户`?`disabled`:false"></el-input>
+          <el-input v-model="form.username" :disabled="formTitle === `编辑用户` || formTitle === `分配角色`?`disabled`:false"></el-input>
         </el-form-item>
         <el-form-item
           label="用户密码"
           :label-width="formLabelWidth"
           prop="password"
-          v-if="formTitle === `编辑用户` ? false : true"
         >
           <el-input v-model="form.password"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
+        <el-form-item label="邮箱" :label-width="formLabelWidth" :disabled="formTitle === `分配角色`?`disabled`:false" prop="email">
           <el-input v-model="form.email"></el-input>
         </el-form-item>
-        <el-form-item label="手机号码" :label-width="formLabelWidth" prop="mobile">
+        <el-form-item label="手机号码" :label-width="formLabelWidth" :disabled="formTitle === `分配角色`?`disabled`:false" prop="mobile">
           <el-input v-model="form.mobile"></el-input>
         </el-form-item>
+        <el-form-item label="分配角色" :label-width="formLabelWidth" v-if="formTitle === `分配角色`?true:false" prop="mobile">
+           <el-select v-model="form.region" placeholder="请选择活动区域">
+             <el-option   v-for="item in options"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">>
+            </el-option>
+          </el-select>
+       </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -94,7 +98,9 @@
   </div>
 </template>>
 <script>
+import scBreadcrumb from '../loading/scBreadcrumb'
 export default {
+  components: { scBreadcrumb },
   data () {
     // 验证邮箱的规则
     var checkEmail = (rule, value, cb) => {
@@ -121,6 +127,11 @@ export default {
       cb(new Error('请输入合法的手机号'))
     }
     return {
+      navigation: {
+        name1: '用户管理',
+        name2: '用户列表',
+        separator: '>'
+      },
       totalpage: 400, // 总条数
       totalObj: {
         // 接口参数
@@ -140,6 +151,7 @@ export default {
         email: '',
         mobile: ''
       },
+      options: [], // 分配角色
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -175,7 +187,7 @@ export default {
   },
   methods: {
     addDialogClosed () {
-      // 关闭弹窗触发
+      // 关闭弹窗时触发
       this.$refs.addForm.resetFields()
     },
     addButton () {
@@ -194,9 +206,21 @@ export default {
         mobile: row.mobile
       }
     },
-    async delButton (row) {
+    assginButton (row) {
+      this.formTitle = '分配角色'
+      this.dialogFormVisible = true
+      this.form = {
+        id: row.id,
+        username: row.username,
+        password: row.password,
+        email: row.email,
+        mobile: row.mobile
+      }
+    },
+    // async
+    async delButton (row) { // 删除用户
       const { data: res } = await this.$http.delete('/users/' + row.id)
-      if (res.meta.status !== 200) { return this.$message.error({ type: 'error', message: row.meta.msg }) }
+      if (res.meta.status !== 200) { return this.$message({ type: 'error', message: row.meta.msg }) }
       this.$message.success('删除成功')
       this.selectUser()
     },
@@ -256,6 +280,8 @@ export default {
         `users/${userInfo.id}/state/${userInfo.mg_state}`
       )
       if (res.meta.status !== 200) return this.$message.error('状态改变失败')
+      this.$message.success('状态改变')
+      this.selectUser()
       //   this.$$message.success('')
     },
     handleSizeChange (val) {

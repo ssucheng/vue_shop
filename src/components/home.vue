@@ -9,21 +9,20 @@
       <el-aside :width="isCollapse?'64px' :'200px'">
          <div @click="toggleBtn" type='info'  class="toggle-button">|||</div>
         <el-menu
-          :default-active="$router.path"
-          class="el-menu-vertical-demo"
+          :default-active="$route.path"
+          unique-opened
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
-          v-for="(item,index) in metuList"
-          :key="item.id"
+
           :collapse="isCollapse"
-          :collapse-transition="false"
+          :collapse-transition="true"
           router
         >
-
-          <el-submenu :index="item.id + ''">
+          <el-submenu :index="item.id + ``" v-for="(item,index0) in metuList"
+          :key="item.id">
             <template slot="title">
-              <i :class="MenuIcont[index]" style="margin-right:5px"></i>
+              <i :class="MenuIcont[index0]" style="margin-right:5px"></i>
               <span >{{item.authName}}</span>
             </template>
             <el-menu-item-group v-for="item1 in item.children" :key="item1.id">
@@ -51,7 +50,6 @@ export default {
       metuList: [],
       // 关闭
       isCollapse: false
-
     }
   },
   created () {

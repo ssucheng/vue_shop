@@ -23,7 +23,12 @@ import {
   Pagination,
   Switch,
   Dialog,
-  Tooltip
+  Tooltip,
+  Tag,
+  MessageBox,
+  Select,
+  Tree,
+  Loading
 } from 'element-ui'
 
 Vue.use(Button)
@@ -49,8 +54,14 @@ Vue.use(Pagination)
 Vue.use(Switch)
 Vue.use(Dialog)
 Vue.use(Tooltip)
-
+Vue.use(Tag)
+Vue.use(Select)
+Vue.use(Tree)
+Vue.use(Loading.directive)
 Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm
+
+// Vue.prototype.$confirm = confirm
 // Vue.use(Message.success({
 //   message: '测试',
 //   type: 'success'

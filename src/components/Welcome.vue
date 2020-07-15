@@ -1,6 +1,6 @@
 <template>
     <div>
-        我是welcom
+        我是首页
     </div>
 </template>
 <script>
