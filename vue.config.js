@@ -1,3 +1,4 @@
+// 配置全局less的样式
 const path = require('path')
 module.exports = {
   pluginOptions: {

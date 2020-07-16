@@ -22,6 +22,7 @@ export function getRoles (url) { // lookOption是你要调用接口的名字，i
 
   })
 }
+
 // 分配用户角色
 export function assginRole (url, params) {
   return fetch({
@@ -29,6 +30,18 @@ export function assginRole (url, params) {
     method: 'put',
     data: {
       rid: params.rid
+    }
+  })
+}
+// 商品分类数据列表
+export function getCate (url, params) {
+  return fetch({
+    url: api.Hallowmas + url,
+    method: 'get',
+    params: {
+      type: params.type,
+      pagenum: params.pagenum,
+      pagesize: params.pagesize
     }
   })
 }

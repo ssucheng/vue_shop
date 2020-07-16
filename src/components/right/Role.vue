@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑导航 -->
-    <sc-breadcrumb :item-prop="navigation"></sc-breadcrumb>
+    <sc-breadcrumb :data="navigation"></sc-breadcrumb>
     <!-- 视图card -->
     <el-card class="box-card" style="margin-top:10px">
       <el-button type="primary" style="margin-bottom:20px" @click="addRole">添加角色</el-button>

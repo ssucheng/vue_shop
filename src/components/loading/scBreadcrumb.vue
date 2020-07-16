@@ -12,7 +12,7 @@
 export default {
   name: 'scBreadcrumb',
   props: {
-    itemProp: {
+    data: {
       type: Object
 
     }
@@ -26,7 +26,7 @@ export default {
   },
   created () {
     var that = this
-    that.item = that.itemProp
+    that.item = that.data
   }
 }
 </script>

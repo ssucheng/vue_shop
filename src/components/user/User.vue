@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑 -->
-     <sc-breadcrumb :item-prop='navigation'></sc-breadcrumb>
+     <sc-breadcrumb :data='navigation'></sc-breadcrumb>
     <!-- car视图区域 -->
     <el-card class="box-card" shadow="always" style="margin-top:15px ">
       <!-- 搜索添加 -->

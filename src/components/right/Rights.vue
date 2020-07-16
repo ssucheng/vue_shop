@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑 -->
-      <sc-breadcrumb :item-prop='navigation'></sc-breadcrumb>
+      <sc-breadcrumb :data='navigation'></sc-breadcrumb>
     <!-- 视图card -->
     <el-card class="box-card" style="margin-top:10px">
       <el-table :data="tableData" border style="width: 100%">
