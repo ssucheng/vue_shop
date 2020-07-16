@@ -42,8 +42,8 @@
             <el-tooltip class="item" effect="dark" content="删除" placement="top">
               <el-button type="danger" icon="el-icon-delete" @click="delButton(scope.row)"></el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="分配角色" placement="top" @click="assginButton(scope.row)">
-              <el-button type="warning" icon="el-icon-setting"></el-button>
+            <el-tooltip class="item" effect="dark" content="分配角色" placement="top" >
+              <el-button type="warning" icon="el-icon-setting" @click="assginButton(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -71,21 +71,22 @@
           label="用户密码"
           :label-width="formLabelWidth"
           prop="password"
+          v-if="formTitle === `分配角色`?false:true"
         >
-          <el-input v-model="form.password"></el-input>
+          <el-input v-model="form.password" ></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" :label-width="formLabelWidth" :disabled="formTitle === `分配角色`?`disabled`:false" prop="email">
-          <el-input v-model="form.email"></el-input>
+        <el-form-item label="邮箱" :label-width="formLabelWidth"  prop="email">
+          <el-input v-model="form.email" :disabled="formTitle === `分配角色`?`disabled`:false"></el-input>
         </el-form-item>
-        <el-form-item label="手机号码" :label-width="formLabelWidth" :disabled="formTitle === `分配角色`?`disabled`:false" prop="mobile">
-          <el-input v-model="form.mobile"></el-input>
+        <el-form-item label="手机号码" :label-width="formLabelWidth"  prop="mobile">
+          <el-input v-model="form.mobile" :disabled="formTitle === `分配角色`?`disabled`:false"></el-input>
         </el-form-item>
-        <el-form-item label="分配角色" :label-width="formLabelWidth" v-if="formTitle === `分配角色`?true:false" prop="mobile">
-           <el-select v-model="form.region" placeholder="请选择活动区域">
-             <el-option   v-for="item in options"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">>
+        <el-form-item label="分配角色" :label-width="formLabelWidth" v-if="formTitle === `分配角色`?true:false" >
+           <el-select v-model="form.rid" placeholder="请分配角色" clearable>
+             <el-option   v-for="(item,index) in options"
+                          :key="index"
+                          :label="item.roleName"
+                          :value="item.id">
             </el-option>
           </el-select>
        </el-form-item>
@@ -99,6 +100,7 @@
 </template>>
 <script>
 import scBreadcrumb from '../loading/scBreadcrumb'
+import { getRoles, assginRole } from '../api/api'
 export default {
   components: { scBreadcrumb },
   data () {
@@ -206,7 +208,7 @@ export default {
         mobile: row.mobile
       }
     },
-    assginButton (row) {
+    async assginButton (row) {
       this.formTitle = '分配角色'
       this.dialogFormVisible = true
       this.form = {
@@ -216,9 +218,24 @@ export default {
         email: row.email,
         mobile: row.mobile
       }
+      const { data: res } = await getRoles('roles')
+      if (res.meta.status !== 200) return this.$message({ type: 'error', message: res.meta.msg })
+      this.options = res.data
     },
     // async
     async delButton (row) { // 删除用户
+      const confirmMessage = await this.$confirm(
+        '此操作将永久取消该权限, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      ).catch(() => {})
+      if (confirmMessage !== 'confirm') {
+        return this.$message({ type: 'info', message: '删除操作已取消' })
+      }
       const { data: res } = await this.$http.delete('/users/' + row.id)
       if (res.meta.status !== 200) { return this.$message({ type: 'error', message: row.meta.msg }) }
       this.$message.success('删除成功')
@@ -229,7 +246,6 @@ export default {
         this.$refs.addForm.validate(async valid => {
           if (!valid) return
           const { data: res } = await this.$http.post('/users', this.form)
-          console.log(res)
           if (res.meta.status !== 201) {
             return this.$message.error({
               showClose: true,
@@ -241,14 +257,13 @@ export default {
           this.$message.success('添加用户成功')
           this.selectUser()
         })
-      } else {
+      } else if (this.formTitle === '编辑用户') {
         this.$refs.addForm.validate(async valid => {
           if (!valid) return
           const { data: res } = await this.$http.put(`/users/${this.form.id}`, {
             email: this.form.email,
             mobile: this.form.mobile
           })
-          //   console.log(res)
           if (res.meta.status !== 200) {
             return this.$message.error({
               showClose: true,
@@ -258,6 +273,19 @@ export default {
           }
           this.dialogFormVisible = false
           this.$message.success('修改用户成功')
+          this.selectUser()
+        })
+      } else {
+        this.$refs.addForm.validate(async valid => {
+          if (!valid) return
+          console.log(this.form.region)
+          const { data: res } = await assginRole('users', {
+            id: this.form.id,
+            rid: this.form.rid
+          })
+          if (res.meta.status !== 200) return this.$message({ type: 'error', message: res.meta.msg })
+          this.dialogFormVisible = false
+          this.$message({ type: 'success', message: res.meta.msg })
           this.selectUser()
         })
       }
@@ -270,7 +298,6 @@ export default {
       if (res.meta.status !== 200) {
         return this.$message.error('用户列表获取失败')
       }
-      //   console.log(res.data)
       this.tableData = res.data.users
       this.totalpage = res.data.total
     },

@@ -28,7 +28,8 @@ import {
   MessageBox,
   Select,
   Tree,
-  Loading
+  Loading,
+  Option
 } from 'element-ui'
 
 Vue.use(Button)
@@ -57,7 +58,9 @@ Vue.use(Tooltip)
 Vue.use(Tag)
 Vue.use(Select)
 Vue.use(Tree)
-Vue.use(Loading.directive)
+Vue.use(Option)
+
+Vue.use(Loading.directive) // 使用loading组件
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
 

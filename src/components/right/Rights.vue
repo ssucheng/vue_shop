@@ -6,14 +6,19 @@
     <el-card class="box-card" style="margin-top:10px">
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column type="index"></el-table-column>
-        <el-table-column prop="authName" label="权限名称"></el-table-column>
+        <el-table-column prop="authName" label="权限名称">
+           <!-- <template v-slot:default="slotProps">
+              {{slotProps}}
+          </template> -->
+        </el-table-column>
         <el-table-column prop="path" label="路径"></el-table-column>
         <el-table-column prop="level" label="权限等级">
-          <template slot-scope="scope">
+          <template v-slot:default="scope">
             <el-tag v-if="scope.row.level == 0 ">一级</el-tag>
             <el-tag v-else-if="scope.row.level == 1 " type="success">二级</el-tag>
             <el-tag type="warning" v-else>三级</el-tag>
           </template>
+
         </el-table-column>
       </el-table>
     </el-card>
