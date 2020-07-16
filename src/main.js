@@ -2,11 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
-// import ZkTable from 'vue-table-with-tree-grid' // 引入树形表格组件
-// import VueRouter from 'vue-router'
-import 'xe-utils' //  VXETable
-import VXETable from 'vxe-table' // VXETable
+// vxtable 局部引入
+import './plugins/utils'
+import './plugins/table'
 import 'vxe-table/lib/index.css'
+// element-ui 局部引入
 import './plugins/element.js'
 // 全局样式
 import './assets/style/css/global.css'
@@ -21,12 +21,6 @@ axios.interceptors.request.use((config) => {
   config.headers.Authorization = window.sessionStorage.getItem('token')
   return config
 })
-
-// Vue.component(ZkTable.name, ZkTable) // 全局注册组件
-
-Vue.use(VXETable)// VXETable
-// 给 vue 实例挂载全局窗口对象，属性名称随意定义，例如：$XModal
-Vue.prototype.$modal = VXETable.modal// VXETable
 
 Vue.config.productionTip = false
 

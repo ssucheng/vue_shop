@@ -31,7 +31,7 @@ import {
   Loading,
   Option
 } from 'element-ui'
-
+Vue.prototype.$ELEMENT = { size: 'small', zIndex: 3000 }
 Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)

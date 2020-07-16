@@ -3,7 +3,25 @@
     <sc-breadcrumb :data="navigation"></sc-breadcrumb>
     <el-card class="box-card" style="margin-top:10px">
       <el-button type="primary" style="margin-bottom:20px" @click="addCate">添加分类</el-button>
-
+      <!-- 树形表格 -->
+        <vxe-table
+          resizable
+          tree-config
+          border="full"
+          ref="xTree"
+          :data="tableData"
+          :highlight-hover-row='true'
+          @toggle-tree-expand="toggleExpandChangeEvent">
+           <vxe-table-column type="seq" width="50"></vxe-table-column>
+          <vxe-table-column field="cat_name" title="分类名称" tree-node></vxe-table-column>
+          <vxe-table-column field="cat_deleted" title="是否有效"></vxe-table-column>
+          <vxe-table-column field="cat_level" title="排序">
+              <!-- <template v-slot='scope'>
+                <pre>{{scope.row}}</pre>
+              </template> -->
+          </vxe-table-column>
+          <vxe-table-column field="date" title="操作"></vxe-table-column>
+        </vxe-table>
       <!-- 分页页脚 -->
       <div class="block" style="margin-top:10px">
         <el-pagination
@@ -26,10 +44,11 @@ export default {
   components: { scBreadcrumb },
   data () {
     return {
+      tableData: [],
       params: {
         type: '',
         pagenum: 1,
-        pagesize: 5
+        pagesize: 40
       },
       navigation: {
         // 面包屑组件数据
@@ -38,28 +57,8 @@ export default {
         separator: '>'
       },
       data: [],
-      totalpage: 400,
-      columns: [
-        {
-          label: '分类名称',
-          prop: 'cat_name'
-        },
-        {
-          label: '是否有效',
-          prop: 'sex'
-        },
-        {
-          label: '排序',
-          prop: 'cat_level',
-          type: 'template',
-          template: 'sort'
-        },
-        {
-          label: '操作',
-          type: 'template',
-          template: 'handle'
-        }
-      ]
+      totalpage: 400
+
     }
   },
   created () {
@@ -70,8 +69,8 @@ export default {
       const { data: res } = await getCate('categories', this.params)
       if (res.meta.status !== 200) { return this.$message({ type: 'error', message: res.meta.message }) }
       this.totalpage = res.data.total
-      this.data = res.data.result
-      debugger
+      this.tableData = res.data.result
+      // debugger
     },
     handleSizeChange (val) {
       this.params.pagesize = val
@@ -80,6 +79,9 @@ export default {
     handleCurrentChange (val) {
       this.params.pagenum = val
       this.getCatePage()
+    },
+    toggleExpandChangeEvent () {
+
     },
     addCate () {},
     editCate () {}
