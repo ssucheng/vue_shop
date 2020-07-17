@@ -46,6 +46,38 @@ export function getCate (url, params) {
   })
 }
 
+// 添加分类
+export function addCateApi (url, params) {
+  return fetch({
+    url: api.Hallowmas + url,
+    method: 'post',
+    data: {
+      cat_pid: params.cat_pid,
+      cat_name: params.name,
+      cat_level: params.cat_level
+    }
+  })
+}
+
+// 编辑提交分类
+export function editCateApi (url, params) {
+  return fetch({
+    url: api.Hallowmas + url + '/' + params.id,
+    method: 'put',
+    data: {
+      cat_name: params.name
+    }
+  })
+}
+
+// 删除分类
+export function delCateApi (url, params) {
+  return fetch({
+    url: api.Hallowmas + url + '/' + params.id,
+    method: 'delete'
+  })
+}
+
 // 有新接口的时候像上面那样再来一次
 // //修改昵称接口
 // export function userID(name){

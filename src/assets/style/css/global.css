@@ -13,3 +13,4 @@ html,body,#app{
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
+.el-cascader-menu {   height: 300px; }

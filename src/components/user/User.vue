@@ -190,7 +190,7 @@ export default {
   methods: {
     addDialogClosed () {
       // 关闭弹窗时触发
-      this.$refs.addForm.resetFields()
+      // this.$refs.addForm.resetFields()
     },
     addButton () {
       this.formTitle = '添加用户'

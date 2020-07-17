@@ -29,7 +29,8 @@ import {
   Select,
   Tree,
   Loading,
-  Option
+  Option,
+  Cascader
 } from 'element-ui'
 Vue.prototype.$ELEMENT = { size: 'small', zIndex: 3000 }
 Vue.use(Button)
@@ -59,6 +60,7 @@ Vue.use(Tag)
 Vue.use(Select)
 Vue.use(Tree)
 Vue.use(Option)
+Vue.use(Cascader)
 
 Vue.use(Loading.directive) // 使用loading组件
 Vue.prototype.$message = Message
