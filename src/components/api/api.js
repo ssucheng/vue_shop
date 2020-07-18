@@ -78,6 +78,50 @@ export function delCateApi (url, params) {
   })
 }
 
+// 分类参数管理参数列表
+export function getCateAttributesApi (url, params) {
+  return fetch({
+    url: api.Hallowmas + url + '/' + params.cateId + '/' + 'attributes',
+    method: 'get',
+    params: {
+      sel: params.activeName
+    }
+  })
+}
+
+// 添加董改参数或者静态属性
+export function addCateOrApi (url, params) {
+  return fetch({
+    url: api.Hallowmas + url + '/' + params.cateId + '/' + 'attributes',
+    method: 'post',
+    data: {
+      attr_name: params.attr_name,
+      attr_sel: params.attr_sel
+    }
+  })
+}
+
+// 编辑提交参数
+export function putCateAttrApi (url, params) {
+  return fetch({
+    url: api.Hallowmas + url + '/' + params.id + '/' + 'attributes' + '/' + params.attr_id,
+    method: 'put',
+    data: {
+      attr_name: params.attr_name,
+      attr_sel: params.attr_sel,
+      attr_vals: params.attr_vals
+    }
+  })
+}
+
+// 删除参数
+export function delCateAttrApi (url, params) {
+  return fetch({
+    url: api.Hallowmas + url + '/' + params.id + '/' + 'attributes' + '/' + params.attr_id,
+    method: 'delete'
+
+  })
+}
 // 有新接口的时候像上面那样再来一次
 // //修改昵称接口
 // export function userID(name){
