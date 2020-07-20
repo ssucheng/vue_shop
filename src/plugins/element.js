@@ -33,7 +33,9 @@ import {
   Cascader,
   Alert,
   Tabs,
-  TabPane
+  TabPane,
+  Step,
+  Steps
 } from 'element-ui'
 Vue.prototype.$ELEMENT = { size: 'small', zIndex: 3000 }
 Vue.use(Button)
@@ -67,6 +69,8 @@ Vue.use(Cascader)
 Vue.use(Alert)
 Vue.use(Tabs)
 Vue.use(TabPane)
+Vue.use(Step)
+Vue.use(Steps)
 
 Vue.use(Loading.directive) // 使用loading组件
 Vue.prototype.$message = Message

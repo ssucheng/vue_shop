@@ -93,7 +93,7 @@
       @close="resetForm"
     >
       <el-form :model="form" label-width="100px" :rules="FormRules" ref="formRef">
-        <el-form-item :label="textTitle" prop="attr_name">
+        <el-form-item :label="textTitle" :prop="propsForm">
           <el-input v-model="form.attr_name"></el-input>
         </el-form-item>
       </el-form>
@@ -149,7 +149,10 @@ export default {
       onlyTableData: [], // 静态表格数据
       FormRules: {
         attr_name: [
-          { required: true, message: '不能为空', trigger: 'blur' }
+          { required: true, message: '请添加参数', trigger: 'blur' }
+        ],
+        attr_name1: [
+          { required: true, message: '请添加属性', trigger: 'blur' }
         ]
       }
     }
@@ -340,6 +343,13 @@ export default {
         return '动态参数'
       } else {
         return '静态属性'
+      }
+    },
+    propsForm: function () {
+      if (this.activeName === 'many') {
+        return 'attr_name'
+      } else {
+        return 'attr_name1'
       }
     }
   }

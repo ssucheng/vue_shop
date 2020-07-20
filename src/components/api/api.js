@@ -122,6 +122,28 @@ export function delCateAttrApi (url, params) {
 
   })
 }
+
+// 商品列表数据
+export function getGoodsApi (url, params) {
+  return fetch({
+    url: api.Hallowmas + url,
+    method: 'get',
+    params: {
+      query: params.query,
+      pagenum: params.pagenum,
+      pagesize: params.pagesize
+    }
+
+  })
+}
+
+// 删除商品
+export function delGoodsApi (url, params) {
+  return fetch({
+    url: api.Hallowmas + url + '/' + params.id,
+    method: 'delete'
+  })
+}
 // 有新接口的时候像上面那样再来一次
 // //修改昵称接口
 // export function userID(name){
