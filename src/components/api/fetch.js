@@ -1,5 +1,7 @@
 import axios from 'axios'// 引入axios
-
+import nprogress from 'nprogress'
+// 引入样式
+import 'nprogress/nprogress.css'
 export function fetch (options) {
   return new Promise((resolve, reject) => {
     const instance = axios.create({ // instance创建一个axios实例，可以自定义配置，可在 axios文档中查看详情
@@ -13,7 +15,13 @@ export function fetch (options) {
     // 拦截器  请求之前请求头要添加token信息
     instance.interceptors.request.use((config) => {
     //   console.log(config)
+      nprogress.start()
       config.headers.Authorization = window.sessionStorage.getItem('token')
+      return config
+    })
+    instance.interceptors.response.use((config) => {
+      //   console.log(config)
+      nprogress.done()
       return config
     })
 

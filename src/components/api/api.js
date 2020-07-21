@@ -144,6 +144,42 @@ export function delGoodsApi (url, params) {
     method: 'delete'
   })
 }
+
+// 订单数据列表
+export function getOrdersApi (url, params) {
+  return fetch({
+    url: api.Hallowmas + url,
+    method: 'get',
+    params: {
+      query: params.query,
+      pagenum: params.pagenum,
+      pagesize: params.pagesize,
+      user_id: params.user_id,
+      pay_status: params.pay_status,
+      is_send: params.is_send,
+      order_fapiao_title: params.order_fapiao_title,
+      consignee_addr: params.consignee_addr,
+      order_fapiao_content: params.order_fapiao_content,
+      order_fapiao_company: params.order_fapiao_company
+    }
+  })
+}
+
+// 查看物流信息
+export function getKuaidiApi (url, params) {
+  return fetch({
+    url: api.Hallowmas + url + '/' + params.id,
+    method: 'get'
+  })
+}
+
+// 数据统计
+export function getReportApi (url, params) {
+  return fetch({
+    url: api.Hallowmas + url,
+    method: 'get'
+  })
+}
 // 有新接口的时候像上面那样再来一次
 // //修改昵称接口
 // export function userID(name){
